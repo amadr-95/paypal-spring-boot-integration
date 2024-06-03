@@ -1,4 +1,4 @@
-package org.payment.config;
+package org.payment.paypal;
 
 import com.paypal.base.rest.APIContext;
 import org.springframework.boot.context.properties.ConfigurationProperties;
