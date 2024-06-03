@@ -27,8 +27,15 @@ In order to use PayPal integration in your project in development mode you have 
 Also, you have to generate the `clientId` and the `clientSecret` by login in with your PayPal account at 
 https://developer.paypal.com
 
-[paypal-sandbox]
+![paypal-sandbox](https://github.com/amadr-95/paypal-spring-boot-integration/assets/122611230/e960ed18-b1cb-4d0c-b5bc-ee3d9a9e7408)
 
-[paypal-keys]
+![paypal-keys](https://github.com/amadr-95/paypal-spring-boot-integration/assets/122611230/17730659-eda7-4693-b207-611aa7af1892)
+
 
 Once you have the generated keys, copy them in the .properties or .yml file.
+
+### Some screenshots
+
+![ui](https://github.com/amadr-95/paypal-spring-boot-integration/assets/122611230/4270119e-6b34-44c5-b82c-ab8c6b766fdb)
+
+![payment](https://github.com/amadr-95/paypal-spring-boot-integration/assets/122611230/d310d751-9273-4139-bb91-86a73083c83e)
