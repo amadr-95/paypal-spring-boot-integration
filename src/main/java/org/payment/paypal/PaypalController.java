@@ -5,6 +5,7 @@ import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,10 @@ import org.springframework.web.servlet.view.RedirectView;
 @Slf4j
 public class PaypalController {
 
+    @Value("${application.paypal.success_url}")
+    private String SUCCESS_URL;
+    @Value("${application.paypal.cancel_url}")
+    private String CANCEL_URL;
     private final PaypalService paypalService;
 
     @GetMapping("/")
@@ -31,42 +36,37 @@ public class PaypalController {
             @RequestParam String description
 
     ) {
-        String cancelUrl = "http://localhost:8080/payment/cancel";
-        String successUrl = "http://localhost:8080/payment/success";
-
         try {
+            double parsedAmount = Double.parseDouble(amount);
+
             Payment payment = paypalService.createPayment(
-                    Double.parseDouble(amount),
+                    parsedAmount,
                     currency,
                     method,
                     "sale",
                     description,
-                    cancelUrl,
-                    successUrl
+                    CANCEL_URL,
+                    SUCCESS_URL
             );
-
-            for (Links link : payment.getLinks()) {
-                if (link.getRel().equals("approval_url"))
-                    return new RedirectView(link.getHref());
-            }
+            return getApprovalUrl(payment);
+        } catch (NumberFormatException e) {
+            log.error("Amount format exception: {}", amount, e);
+            return new RedirectView("/payment/error");
         } catch (PayPalRESTException e) {
-            log.error("create payment error::", e);
+            log.error("Create payment exception::", e);
+            return new RedirectView("/payment/error");
         }
-
-        return new RedirectView("/payment/error");
     }
 
     @GetMapping("/payment/success")
     public String paymentSuccess(@RequestParam String paymentId, @RequestParam("PayerID") String payerId) {
         try {
             Payment payment = paypalService.executePayment(payerId, paymentId);
-            if (payment.getState().equals("approved"))
-                return "paymentSuccess";
-
+                return payment.getState().equals("approved") ? "paymentSuccess" : "paymentError";
         } catch (PayPalRESTException e) {
-            log.error("Payment not success error::", e);
+            log.error("Payment execution error::", e);
+            return "paymentError";
         }
-        return "paymentSuccess";
     }
 
     @GetMapping("/payment/cancel")
@@ -77,6 +77,15 @@ public class PaypalController {
     @GetMapping("/payment/error")
     public String paymentError() {
         return "paymentError";
+    }
+
+    private RedirectView getApprovalUrl(Payment payment) {
+        for (Links link : payment.getLinks()) {
+            if (link.getRel().equals("approval_url"))
+                return new RedirectView(link.getHref());
+        }
+
+        return new RedirectView("/payment/error");
     }
 
 }
