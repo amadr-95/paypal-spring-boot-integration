@@ -1,4 +1,4 @@
-package org.payment.paypal;
+package org.payment.config;
 
 import com.paypal.base.rest.APIContext;
 import org.springframework.beans.factory.annotation.Value;

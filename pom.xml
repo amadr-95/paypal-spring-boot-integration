@@ -8,7 +8,7 @@
         <version>3.3.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>org.paypal</groupId>
+    <groupId>org.payment</groupId>
     <artifactId>paypal-integration</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>paypal-integration</name>
