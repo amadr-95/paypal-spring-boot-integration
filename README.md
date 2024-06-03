@@ -2,7 +2,7 @@
 
 This is a demo example of how to integrate paypal payment method on your application.
 
-### Paypal maven dependencies
+### PayPal maven dependencies
 
 ```xml
 <dependencies>
