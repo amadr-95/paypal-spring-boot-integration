@@ -1,0 +1,7 @@
+application:
+  paypal:
+    clientId: YOUR_CLIENT_ID
+    clientSecret: YOUR_CLIENT_SECRET
+    mode: sandbox #for development mode (not real payments). Value 'live' for production
+    success_url: http://localhost:8080/payment/success
+    cancel_url: http://localhost:8080/payment/cancel
